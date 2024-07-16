@@ -71,12 +71,12 @@ export class LicenseClient {
       /** Type of Device END */
     } else {
       /** Physical system level */
-      const platform = os.platform();
+      const platform = process?.platform || os.platform();
       /** Type of Device ID Start */
 
       const _host = process?.env?.HOSTNAME || os.hostname();
 
-      const systemInfo = `${_host || ""}${process?.arch}${process?.platform}${process?.version}`;
+      const systemInfo = `${_host || ""}${process?.arch || ""}${platform}${process?.version||""}`;
 
       const hashedData = this.hashString(systemInfo);
       _deviceDetails.deviceId = hashedData;
@@ -84,11 +84,11 @@ export class LicenseClient {
       /** Type of Device ID End */
 
       /** Type of OS Start */
-      if (platform === "linux") {
+      if (platform?.toLowerCase() === "linux") {
         _deviceDetails.osType = "Linux";
-      } else if (platform === "darwin") {
+      } else if (platform?.toLowerCase() === "darwin") {
         _deviceDetails.osType = "Mac";
-      } else if (platform === "win32") {
+      } else if (platform?.toLowerCase() === "win32") {
         _deviceDetails.osType = "Windows";
       } else {
         _deviceDetails.osType = "Unknown";
